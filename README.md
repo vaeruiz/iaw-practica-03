@@ -34,6 +34,6 @@ Y buscamos la cadena de texto
 
 >define('DB_HOST', 'localhost');
 
-Y sustituimos localhost por la dirección ip pública de nuestra máquina back_end.
+Y sustituimos localhost por la dirección ip pública de nuestra máquina back_end y guardamos el archivo.
 
 Hecho todo esto tendremos nuestra máquina preparada.
