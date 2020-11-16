@@ -88,7 +88,3 @@ rm -rf /var/www/html/iaw-practica-lamp
 
 # Cambiar permisos
 chown www-data:www-data * -R
-
-
-
- 
