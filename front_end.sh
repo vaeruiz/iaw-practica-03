@@ -66,11 +66,10 @@ rm -rf phpMyAdmin-5.0.4-all-languages.zip
 # Mover el directorio phpmyadmin
 mv phpMyAdmin-5.0.4-all-languages/ /var/www/html/phpmyadmin
 
-#Configurar config.inc.php y config.php
+#Configurar config.inc.php
 cd /var/www/html/phpmyadmin
 mv config.sample.inc.php config.inc.php
 sed -i "s/localhost/$IP_MYSQL_PUBLICA_BACK/" /var/www/html/phpmyadmin/config.inc.php
-sed -i "s/localhost/$IP_MYSQL_PUBLICA_BACK/" /var/www/html/config.php
 
 # ------------------------------------------------------------------------------
 # Instalación de aplicación web
@@ -80,6 +79,9 @@ cd /var/www/html
 rm -rf iaw-practica-lamp
 git clone https://github.com/josejuansanchez/iaw-practica-lamp
 mv /var/www/html/iaw-practica-lamp/src/* /var/www/html/
+
+# Configurar config.php
+sed -i "s/localhost/$IP_MYSQL_PUBLICA_BACK/" /var/www/html/config.php
 
 # Eliminar directorios innecesarios
 rm -rf /var/www/html/index.html
