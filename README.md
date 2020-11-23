@@ -1,4 +1,4 @@
-# Práctica IAW 3_front_end
+# Práctica IAW 3
 
 ## Creando la máquina front_end
 
@@ -12,11 +12,11 @@ En el apartado grupos de seguridad, añadiremos tres puertos nuevos, el puerto H
 
 Cuando se haya creado la instancia y esté arrancada nos conectamos a ella y clonamos el repositorio que contiene el script para la instalación de apache y otras herramientas.
 
->git clone https://github.com/vaeruiz/iaw-practica-03-front_end
+>git clone https://github.com/vaeruiz/iaw-practica-03
 
 Una vez se haya descargado el repositorio movemos el script de instalación al directorio /home/ubuntu con el siguiente comando:
 
->mv iaw-practica-03-front_end/front_end.sh /home/ubuntu/
+>mv iaw-practica-03/front_end.sh /home/ubuntu/
 
 Después de mover el script al directorio le añadimos permisos de ejecución con el comando:
 
