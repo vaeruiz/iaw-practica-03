@@ -43,7 +43,7 @@ htpasswd -bc $HTTPASSWD_DIR/.htpasswd $HTTPASSWD_USER $HTTPASSWD_PASSWD
 
 # Copiamos el archivo de configuración de Apache
 cd /home/ubuntu
-cp /home/ubuntu/000-default.conf /etc/apache2/sites-available/
+cp /home/ubuntu/iaw-practica-03/000-default.conf /etc/apache2/sites-available/
 systemctl restart apache2
 #---------------------------------------------------------------------------------------------------------------------------------
 
