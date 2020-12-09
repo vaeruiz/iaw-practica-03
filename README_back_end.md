@@ -18,7 +18,7 @@ Después de esto podemos lanzar la instancia y conectarnos a ella.
 
 Una vez nos hayamos conectado descargamos el repositorio de la práctica que contiene el script y los archivos de configuración con el comando git clone.
 
->git clone https://github.com/vaeruiz/iaw-practica-03-back_end
+>git clone https://github.com/vaeruiz/iaw-practica-03.git
 
 Cuando el repositorio se haya descargado movemos el script al directorio /home/ubuntu
 
