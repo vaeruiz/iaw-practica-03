@@ -1,91 +1,36 @@
 #!/bin/bash
-clear
 
-# FUNCIONES
+#Variables
+DB_ROOT_PASSWD=root
+IP_PRIVADA_MYSQL=172.31.27.98
 
-# Funcion para reconocer si el primer caracter del campo id es una letra o un numero utiliza la vari$
-primerCaracter (){
-MUESTREO=$(echo ${MUESTREOID:0:1})
-case $MUESTREO in
-  [0-9])
-        echo "El primer caracter es un numero"
-  ;;
-  [a-z]|[A-Z])
-        echo "El primer caracter es una letra"
-  ;;
-esac
-}
-###################
+# Habilitamos depuración
+set -x
 
-# Comprueba que se ha pasado el archivo a corregir como parametro
-if [ -z "$1" ]
-then
-  echo 'Recuerda escribir el nombre del archivo y su extension al usar el script'
-  echo 'E.j: ./format.sh archivoConvertir.csv'
-  exit
-else
-  echo 'Archivo utilizado '$1
-fi
+# Actualizar lista de paquetes
+apt update
 
-# Crea el archivo de trabajo
-cp $1 copia$1
+# Actualizar paquetes
+apt upgrade -y
 
-# Crea el archivo resultado con la cabecera apropiada
-echo 'Label,Login,Password,Url,Comments' >> result$1
+# Instalar MySQL Server
+apt install mysql-server -y
 
-# Eliminar linea de encabezado en archivo copia
-sed -i -e "1d" copia$1
+#Cambiar autenticación root de MySQL
+mysql -u root <<< "ALTER USER 'root'@'localhost' IDENTIFIED WITH caching_sha2_password BY '$DB_ROOT_PASSWD';"
 
-# Contar lineas de copia
-LINEA=$(cat copia$1 | wc -l)
-echo "Hay " $LINEA " lineas"
+# Configurar archivo MySQL para permitir conexiones desde la IP privada del Back-end
+sed -i "s/127.0.0.1/$IP_PRIVADA_MYSQL/" /etc/mysql/mysql.conf.d/mysqld.cnf
 
+# Reiniciar Mysql
+systemctl restart mysql 
 
-# Obetener primera linea de copia y enviarla a archivo analiza
-head -n 1 copia$1 >> analiza$1
+# ------------------------------------------------------------------------------
+# ejecutamos el script de la base de datos de la aplicación web propuesta
+# ------------------------------------------------------------------------------
+cd /home/ubuntu
+rm -rf iaw-practica-lamp
+git clone https://github.com/josejuansanchez/iaw-practica-lamp
 
-# Funcion para separar los datos de la primera linea
-#STRING=$(cat analiza$1)
-#echo $STRING |tr ";" "\n" >> datos$1
-
-# Funcion para pasar los datos
-for ((j=0;j<=$LINEA;j++))
-do
-   # Funcion para separar los datos de la primera linea
-   STRING=$(cat analiza$1)
-   echo $STRING |tr ";" "\n" >> datos$1
-   ####################################################
-
-   head -n 1 datos$1 >> id$1
-   sed -i -e "1d" datos$1
-   ID=$(cat id$1)
-
-   head -n 1 datos$1 >> label$1
-   sed -i -e "1d" datos$1
-   LAB=$(cat label$1)
-
-   head -n 1 datos$1 >> login$1
-   sed -i -e "1d" datos$1
-   LOGI=$(cat login$1)
-
-   head -n 1 datos$1 >> pass$1
-   sed -i -e "1d" datos$1
-   PASS=$(cat pass$1)
-
-   head -n 1 datos$1 >> url$1
-   sed -i -e "1d" datos$1
-   URL=$(cat url$1)
-
-   head -n 1 datos$1 >> comment$1
-   sed -i -e "1d" datos$1
-   COMM=$(cat comment$1)
-
-   LINESTRING="${LAB},${LOGI},${PASS},${URL},${COMM}"
-   echo $LINESTRING >> result$1
-   sed -i -e "1d" copia$1
-done
-# Llamada a la funcion primerCaracter
-MUESTREOID=$(cat id$1)
-#primerCaracter
-exit
-rm analiza$1 copia$1 label$1 url$1 datos$1 login$1 comment$1 id$1 pass$1
+# Importamos el script de creación de la base de datos
+mysql -u root -p$DB_ROOT_PASSWD < /home/ubuntu/iaw-practica-lamp/db/database.sql
